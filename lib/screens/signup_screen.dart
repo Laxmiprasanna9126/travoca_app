@@ -282,6 +282,7 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 */
+/*
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
 import 'language_selection_screen.dart';
@@ -416,6 +417,151 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: const Text(
                     "Already have an account? Sign In",
                     style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
+import 'package:flutter/material.dart';
+import 'login_screen.dart';
+import 'language_selection_screen.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB3E5FC), // 🌤️ Light sky blue background
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Welcome!",
+                  style: TextStyle(
+                    color: Colors.black, // 🖤 Black text
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                const SizedBox(height: 40),
+
+                // Email Field
+                TextField(
+                  controller: emailController,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Email",
+                    labelStyle: const TextStyle(color: Colors.black54),
+                    prefixIcon: const Icon(Icons.email, color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Password Field
+                TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Password",
+                    labelStyle: const TextStyle(color: Colors.black54),
+                    prefixIcon: const Icon(Icons.lock, color: Colors.black),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Confirm Password Field
+                TextField(
+                  controller: confirmPasswordController,
+                  obscureText: true,
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    labelText: "Confirm Password",
+                    labelStyle: const TextStyle(color: Colors.black54),
+                    prefixIcon: const Icon(
+                      Icons.lock_outline,
+                      color: Colors.black,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+
+                // Sign Up Button
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black, // Black button
+                    foregroundColor: Colors.white, // White text
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    minimumSize: const Size(double.infinity, 50),
+                  ),
+                  onPressed: () {
+                    // Navigate to language selection after sign up
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LanguageSelectionScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Sign Up",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Sign In link
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Already have an account? Sign In",
+                    style: TextStyle(color: Colors.black87),
                   ),
                 ),
               ],

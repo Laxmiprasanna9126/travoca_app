@@ -1982,7 +1982,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
   }
 }
 */
-
+/*
 //adding help button ,clear button
 import 'package:flutter/material.dart';
 import 'listening_screen.dart';
@@ -2499,6 +2499,1548 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
               ],
             );
           },
+        ),
+      ),
+    );
+  }
+}
+*/
+/*
+import 'package:flutter/material.dart';
+import 'listening_screen.dart';
+
+class LanguageSelectionScreen extends StatefulWidget {
+  const LanguageSelectionScreen({super.key});
+
+  @override
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
+}
+
+class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  String? fromLanguage;
+  String? toLanguage;
+
+  final List<String> languages = [
+    'English',
+    'Hindi',
+    'Telugu',
+    'Urdu',
+    'Tamil',
+    'Kannada',
+    'Malayalam',
+    'Bengali',
+    'Gujarati',
+    'Punjabi',
+    'Spanish',
+    'French',
+    'German',
+    'Italian',
+    'Japanese',
+    'Korean',
+    'Chinese (Simplified)',
+    'Chinese (Traditional)',
+    'Arabic',
+    'Russian',
+    'Portuguese',
+    'Dutch',
+    'Turkish',
+    'Greek',
+    'Swedish',
+    'Norwegian',
+    'Polish',
+    'Finnish',
+    'Vietnamese',
+    'Thai',
+    'Indonesian',
+    'Hebrew',
+    'Czech',
+    'Romanian',
+    'Ukrainian',
+    'Afrikaans',
+    'Bulgarian',
+    'Croatian',
+    'Slovak',
+    'Serbian',
+  ];
+
+  final Map<String, String> languageFlags = {
+    'English': '🇬🇧',
+    'Hindi': '🇮🇳',
+    'Telugu': '🇮🇳',
+    'Urdu': '🇮🇳',
+    'Tamil': '🇮🇳',
+    'Kannada': '🇮🇳',
+    'Malayalam': '🇮🇳',
+    'Bengali': '🇮🇳',
+    'Gujarati': '🇮🇳',
+    'Punjabi': '🇮🇳',
+    'Spanish': '🇪🇸',
+    'French': '🇫🇷',
+    'German': '🇩🇪',
+    'Italian': '🇮🇹',
+    'Japanese': '🇯🇵',
+    'Korean': '🇰🇷',
+    'Chinese (Simplified)': '🇨🇳',
+    'Chinese (Traditional)': '🇨🇳',
+    'Arabic': '🇸🇦',
+    'Russian': '🇷🇺',
+    'Portuguese': '🇵🇹',
+    'Dutch': '🇳🇱',
+    'Turkish': '🇹🇷',
+    'Greek': '🇬🇷',
+    'Swedish': '🇸🇪',
+    'Norwegian': '🇳🇴',
+    'Polish': '🇵🇱',
+    'Finnish': '🇫🇮',
+    'Vietnamese': '🇻🇳',
+    'Thai': '🇹🇭',
+    'Indonesian': '🇮🇩',
+    'Hebrew': '🇮🇱',
+    'Czech': '🇨🇿',
+    'Romanian': '🇷🇴',
+    'Ukrainian': '🇺🇦',
+    'Afrikaans': '🇿🇦',
+    'Bulgarian': '🇧🇬',
+    'Croatian': '🇭🇷',
+    'Slovak': '🇸🇰',
+    'Serbian': '🇷🇸',
+  };
+
+  Future<String?> _showLanguagePicker(BuildContext context, String title) {
+    String query = '';
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final results =
+                query.isEmpty
+                    ? languages
+                    : languages
+                        .where(
+                          (l) => l.toLowerCase().contains(
+                            query.trim().toLowerCase(),
+                          ),
+                        )
+                        .toList();
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFB3E5FC), // 🌤️ Light sky blue
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.black),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      autofocus: true,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        hintText: 'Search language...',
+                        hintStyle: const TextStyle(color: Colors.black54),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (v) => setState(() => query = v),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child:
+                          results.isEmpty
+                              ? const Center(
+                                child: Text(
+                                  'No languages found',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )
+                              : ListView.separated(
+                                itemCount: results.length,
+                                separatorBuilder:
+                                    (_, __) => const Divider(
+                                      height: 0,
+                                      color: Colors.black26,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final lang = results[index];
+                                  return ListTile(
+                                    leading: Text(
+                                      languageFlags[lang] ?? '🌐',
+                                      style: const TextStyle(fontSize: 24),
+                                    ),
+                                    title: Text(
+                                      lang,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    onTap:
+                                        () => Navigator.of(context).pop(lang),
+                                  );
+                                },
+                              ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _languagePickerTile({
+    required String label,
+    required String? value,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.black, fontSize: 16)),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black26),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value ?? 'Select language',
+                    style: TextStyle(
+                      color: value == null ? Colors.black54 : Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB3E5FC), // 🌤️ Light blue background
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: IntrinsicHeight(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'CHOOSE YOUR LANGUAGES',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 30),
+                          _languagePickerTile(
+                            label: 'From',
+                            value: fromLanguage,
+                            onTap: () async {
+                              final selection = await _showLanguagePicker(
+                                context,
+                                'Select source',
+                              );
+                              if (selection != null) {
+                                setState(() => fromLanguage = selection);
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                final temp = fromLanguage;
+                                fromLanguage = toLanguage;
+                                toLanguage = temp;
+                              });
+                            },
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                    offset: Offset(2, 2),
+                                  ),
+                                ],
+                              ),
+                              padding: const EdgeInsets.all(12),
+                              child: const Icon(
+                                Icons.swap_vert,
+                                color: Colors.black,
+                                size: 28,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          _languagePickerTile(
+                            label: 'To',
+                            value: toLanguage,
+                            onTap: () async {
+                              final selection = await _showLanguagePicker(
+                                context,
+                                'Select target',
+                              );
+                              if (selection != null) {
+                                setState(() => toLanguage = selection);
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (fromLanguage != null &&
+                                    toLanguage != null) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder:
+                                          (context) => ListeningScreen(
+                                            fromLanguage: fromLanguage!,
+                                            toLanguage: toLanguage!,
+                                          ),
+                                    ),
+                                  );
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Please select both languages first',
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: const Text(
+                                'Start',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 80),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 24,
+                  right: 24,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              fromLanguage = null;
+                              toLanguage = null;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Clear',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (_) => AlertDialog(
+                                  title: const Text(
+                                    'Help & FAQs',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          'Q1: How do I select a language?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Tap on the "From" or "To" box to select a language from the list.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q2: How do I search for a language?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Use the search bar in the dialog to quickly find your language.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q3: What does the swap button do?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'It exchanges the selected "From" and "To" languages.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q4: How do I clear my selections?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Tap the "Clear" button at bottom-left.',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text(
+                                        'Close',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.all(16),
+                          shape: const CircleBorder(),
+                        ),
+                        child: const Icon(
+                          Icons.help_outline,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+*/
+/*
+import 'package:flutter/material.dart';
+
+class LanguageSelectionScreen extends StatefulWidget {
+  const LanguageSelectionScreen({super.key});
+
+  @override
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
+}
+
+class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  String? fromLanguage;
+  String? toLanguage;
+
+  final List<String> languages = [
+    'English',
+    'Hindi',
+    'Telugu',
+    'Urdu',
+    'Tamil',
+    'Kannada',
+    'Malayalam',
+    'Bengali',
+    'Gujarati',
+    'Punjabi',
+    'Spanish',
+    'French',
+    'German',
+    'Italian',
+    'Japanese',
+    'Korean',
+    'Chinese (Simplified)',
+    'Chinese (Traditional)',
+    'Arabic',
+    'Russian',
+    'Portuguese',
+    'Dutch',
+    'Turkish',
+    'Greek',
+    'Swedish',
+    'Norwegian',
+    'Polish',
+    'Finnish',
+    'Vietnamese',
+    'Thai',
+    'Indonesian',
+    'Hebrew',
+    'Czech',
+    'Romanian',
+    'Ukrainian',
+    'Afrikaans',
+    'Bulgarian',
+    'Croatian',
+    'Slovak',
+    'Serbian',
+  ];
+
+  final Map<String, String> languageFlags = {
+    'English': '🇬🇧',
+    'Hindi': '🇮🇳',
+    'Telugu': '🇮🇳',
+    'Urdu': '🇮🇳',
+    'Tamil': '🇮🇳',
+    'Kannada': '🇮🇳',
+    'Malayalam': '🇮🇳',
+    'Bengali': '🇮🇳',
+    'Gujarati': '🇮🇳',
+    'Punjabi': '🇮🇳',
+    'Spanish': '🇪🇸',
+    'French': '🇫🇷',
+    'German': '🇩🇪',
+    'Italian': '🇮🇹',
+    'Japanese': '🇯🇵',
+    'Korean': '🇰🇷',
+    'Chinese (Simplified)': '🇨🇳',
+    'Chinese (Traditional)': '🇨🇳',
+    'Arabic': '🇸🇦',
+    'Russian': '🇷🇺',
+    'Portuguese': '🇵🇹',
+    'Dutch': '🇳🇱',
+    'Turkish': '🇹🇷',
+    'Greek': '🇬🇷',
+    'Swedish': '🇸🇪',
+    'Norwegian': '🇳🇴',
+    'Polish': '🇵🇱',
+    'Finnish': '🇫🇮',
+    'Vietnamese': '🇻🇳',
+    'Thai': '🇹🇭',
+    'Indonesian': '🇮🇩',
+    'Hebrew': '🇮🇱',
+    'Czech': '🇨🇿',
+    'Romanian': '🇷🇴',
+    'Ukrainian': '🇺🇦',
+    'Afrikaans': '🇿🇦',
+    'Bulgarian': '🇧🇬',
+    'Croatian': '🇭🇷',
+    'Slovak': '🇸🇰',
+    'Serbian': '🇷🇸',
+  };
+
+  Future<String?> _showLanguagePicker(BuildContext context, String title) {
+    String query = '';
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final results =
+                query.isEmpty
+                    ? languages
+                    : languages
+                        .where(
+                          (l) => l.toLowerCase().contains(
+                            query.trim().toLowerCase(),
+                          ),
+                        )
+                        .toList();
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFB3E5FC),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.black),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      autofocus: true,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        hintText: 'Search language...',
+                        hintStyle: const TextStyle(color: Colors.black54),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (v) => setState(() => query = v),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child:
+                          results.isEmpty
+                              ? const Center(
+                                child: Text(
+                                  'No languages found',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )
+                              : ListView.separated(
+                                itemCount: results.length,
+                                separatorBuilder:
+                                    (_, __) => const Divider(
+                                      height: 0,
+                                      color: Colors.black26,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final lang = results[index];
+                                  return ListTile(
+                                    leading: Text(
+                                      languageFlags[lang] ?? '🌐',
+                                      style: const TextStyle(fontSize: 24),
+                                    ),
+                                    title: Text(
+                                      lang,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    onTap:
+                                        () => Navigator.of(context).pop(lang),
+                                  );
+                                },
+                              ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _languagePickerTile({
+    required String label,
+    required String? value,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.black, fontSize: 16)),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black26),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value ?? 'Select language',
+                    style: TextStyle(
+                      color: value == null ? Colors.black54 : Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB3E5FC),
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Stack(
+              children: [
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 24,
+                    vertical: 40,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'CHOOSE YOUR LANGUAGES',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 30),
+                      _languagePickerTile(
+                        label: 'From',
+                        value: fromLanguage,
+                        onTap: () async {
+                          final selection = await _showLanguagePicker(
+                            context,
+                            'Select source',
+                          );
+                          if (selection != null)
+                            setState(() => fromLanguage = selection);
+                        },
+                      ),
+                      const SizedBox(height: 20),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            final temp = fromLanguage;
+                            fromLanguage = toLanguage;
+                            toLanguage = temp;
+                          });
+                        },
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                offset: Offset(2, 2),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(12),
+                          child: const Icon(
+                            Icons.swap_vert,
+                            color: Colors.black,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      _languagePickerTile(
+                        label: 'To',
+                        value: toLanguage,
+                        onTap: () async {
+                          final selection = await _showLanguagePicker(
+                            context,
+                            'Select target',
+                          );
+                          if (selection != null)
+                            setState(() => toLanguage = selection);
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (fromLanguage != null && toLanguage != null) {
+                              Navigator.pushNamed(
+                                context,
+                                '/choose_output_mode',
+                                arguments: {
+                                  'fromLanguage': fromLanguage!,
+                                  'toLanguage': toLanguage!,
+                                },
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    'Please select both languages first',
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Next',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 80),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  left: 24,
+                  right: 24,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              fromLanguage = null;
+                              toLanguage = null;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            'Clear',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (_) => AlertDialog(
+                                  title: const Text(
+                                    'Help & FAQs',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                  content: SingleChildScrollView(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          'Q1: How do I select a language?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Tap on the "From" or "To" box to select a language from the list.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q2: How do I search for a language?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Use the search bar in the dialog to quickly find your language.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q3: What does the swap button do?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'It exchanges the selected "From" and "To" languages.',
+                                        ),
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Q4: How do I clear my selections?',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Tap the "Clear" button at bottom-left.',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text(
+                                        'Close',
+                                        style: TextStyle(color: Colors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.all(16),
+                          shape: const CircleBorder(),
+                        ),
+                        child: const Icon(
+                          Icons.help_outline,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/material.dart';
+
+class LanguageSelectionScreen extends StatefulWidget {
+  const LanguageSelectionScreen({super.key});
+
+  @override
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
+}
+
+class _LanguageSelectionScreenState extends State<LanguageSelectionScreen> {
+  String? fromLanguage;
+  String? toLanguage;
+
+  final List<String> languages = [
+    'English',
+    'Hindi',
+    'Telugu',
+    'Urdu',
+    'Tamil',
+    'Kannada',
+    'Malayalam',
+    'Bengali',
+    'Gujarati',
+    'Punjabi',
+    'Spanish',
+    'French',
+    'German',
+    'Italian',
+    'Japanese',
+    'Korean',
+    'Chinese (Simplified)',
+    'Chinese (Traditional)',
+    'Arabic',
+    'Russian',
+    'Portuguese',
+    'Dutch',
+    'Turkish',
+    'Greek',
+    'Swedish',
+    'Norwegian',
+    'Polish',
+    'Finnish',
+    'Vietnamese',
+    'Thai',
+    'Indonesian',
+    'Hebrew',
+    'Czech',
+    'Romanian',
+    'Ukrainian',
+    'Afrikaans',
+    'Bulgarian',
+    'Croatian',
+    'Slovak',
+    'Serbian',
+  ];
+
+  final Map<String, String> languageFlags = {
+    'English': '🇬🇧',
+    'Hindi': '🇮🇳',
+    'Telugu': '🇮🇳',
+    'Urdu': '🇮🇳',
+    'Tamil': '🇮🇳',
+    'Kannada': '🇮🇳',
+    'Malayalam': '🇮🇳',
+    'Bengali': '🇮🇳',
+    'Gujarati': '🇮🇳',
+    'Punjabi': '🇮🇳',
+    'Spanish': '🇪🇸',
+    'French': '🇫🇷',
+    'German': '🇩🇪',
+    'Italian': '🇮🇹',
+    'Japanese': '🇯🇵',
+    'Korean': '🇰🇷',
+    'Chinese (Simplified)': '🇨🇳',
+    'Chinese (Traditional)': '🇨🇳',
+    'Arabic': '🇸🇦',
+    'Russian': '🇷🇺',
+    'Portuguese': '🇵🇹',
+    'Dutch': '🇳🇱',
+    'Turkish': '🇹🇷',
+    'Greek': '🇬🇷',
+    'Swedish': '🇸🇪',
+    'Norwegian': '🇳🇴',
+    'Polish': '🇵🇱',
+    'Finnish': '🇫🇮',
+    'Vietnamese': '🇻🇳',
+    'Thai': '🇹🇭',
+    'Indonesian': '🇮🇩',
+    'Hebrew': '🇮🇱',
+    'Czech': '🇨🇿',
+    'Romanian': '🇷🇴',
+    'Ukrainian': '🇺🇦',
+    'Afrikaans': '🇿🇦',
+    'Bulgarian': '🇧🇬',
+    'Croatian': '🇭🇷',
+    'Slovak': '🇸🇰',
+    'Serbian': '🇷🇸',
+  };
+
+  Future<String?> _showLanguagePicker(BuildContext context, String title) {
+    String query = '';
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            final results =
+                query.isEmpty
+                    ? languages
+                    : languages
+                        .where(
+                          (l) => l.toLowerCase().contains(
+                            query.trim().toLowerCase(),
+                          ),
+                        )
+                        .toList();
+
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Container(
+                padding: const EdgeInsets.all(12),
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.7,
+                  maxWidth: MediaQuery.of(context).size.width * 0.9,
+                ),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFB3E5FC),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.close, color: Colors.black),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    TextField(
+                      autofocus: true,
+                      style: const TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                        hintText: 'Search language...',
+                        hintStyle: const TextStyle(color: Colors.black54),
+                        prefixIcon: const Icon(
+                          Icons.search,
+                          color: Colors.black,
+                        ),
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      onChanged: (v) => setState(() => query = v),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child:
+                          results.isEmpty
+                              ? const Center(
+                                child: Text(
+                                  'No languages found',
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              )
+                              : ListView.separated(
+                                itemCount: results.length,
+                                separatorBuilder:
+                                    (_, __) => const Divider(
+                                      height: 0,
+                                      color: Colors.black26,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final lang = results[index];
+                                  return ListTile(
+                                    leading: Text(
+                                      languageFlags[lang] ?? '🌐',
+                                      style: const TextStyle(fontSize: 24),
+                                    ),
+                                    title: Text(
+                                      lang,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    onTap:
+                                        () => Navigator.of(context).pop(lang),
+                                  );
+                                },
+                              ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget _languagePickerTile({
+    required String label,
+    required String? value,
+    required VoidCallback onTap,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.black, fontSize: 16)),
+        const SizedBox(height: 8),
+        GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: Colors.black26),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    value ?? 'Select language',
+                    style: TextStyle(
+                      color: value == null ? Colors.black54 : Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const Icon(Icons.arrow_drop_down, color: Colors.black),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB3E5FC),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height - 120,
+                  ),
+                  child: IntrinsicHeight(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'CHOOSE YOUR LANGUAGES',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        _languagePickerTile(
+                          label: 'From',
+                          value: fromLanguage,
+                          onTap: () async {
+                            final selection = await _showLanguagePicker(
+                              context,
+                              'Select source',
+                            );
+                            if (selection != null)
+                              setState(() => fromLanguage = selection);
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              final temp = fromLanguage;
+                              fromLanguage = toLanguage;
+                              toLanguage = temp;
+                            });
+                          },
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                  offset: Offset(2, 2),
+                                ),
+                              ],
+                            ),
+                            padding: const EdgeInsets.all(12),
+                            child: const Icon(
+                              Icons.swap_vert,
+                              color: Colors.black,
+                              size: 28,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        _languagePickerTile(
+                          label: 'To',
+                          value: toLanguage,
+                          onTap: () async {
+                            final selection = await _showLanguagePicker(
+                              context,
+                              'Select target',
+                            );
+                            if (selection != null)
+                              setState(() => toLanguage = selection);
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (fromLanguage != null && toLanguage != null) {
+                                Navigator.pushNamed(
+                                  context,
+                                  '/choose_output_mode',
+                                  arguments: {
+                                    'fromLanguage': fromLanguage!,
+                                    'toLanguage': toLanguage!,
+                                  },
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please select both languages first',
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: const Text(
+                              'Next',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // Bottom buttons
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          fromLanguage = null;
+                          toLanguage = null;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Clear',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder:
+                            (_) => AlertDialog(
+                              title: const Text(
+                                'Help & FAQs',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      'Q1: How do I select a language?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Tap on the "From" or "To" box to select a language from the list.',
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Q2: How do I search for a language?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Use the search bar in the dialog to quickly find your language.',
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Q3: What does the swap button do?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'It exchanges the selected "From" and "To" languages.',
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      'Q4: How do I clear my selections?',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Tap the "Clear" button at bottom-left.',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text(
+                                    'Close',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
+                                ),
+                              ],
+                            ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.all(16),
+                      shape: const CircleBorder(),
+                    ),
+                    child: const Icon(
+                      Icons.help_outline,
+                      color: Colors.white,
+                      size: 28,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
