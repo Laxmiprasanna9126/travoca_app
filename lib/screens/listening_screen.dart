@@ -2171,6 +2171,7 @@ class _ListeningScreenState extends State<ListeningScreen> {
   }
 }
 */
+
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'choose_output.dart';
@@ -2401,3 +2402,152 @@ class _ListeningScreenState extends State<ListeningScreen> {
     );
   }
 }
+
+/*
+import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'choose_output.dart';
+
+class ListeningScreen extends StatefulWidget {
+  final String fromLanguage;
+  final String toLanguage;
+
+  const ListeningScreen({
+    Key? key,
+    required this.fromLanguage,
+    required this.toLanguage,
+  }) : super(key: key);
+
+  @override
+  State<ListeningScreen> createState() => _ListeningScreenState();
+}
+
+class _ListeningScreenState extends State<ListeningScreen> {
+  late stt.SpeechToText _speech;
+  bool _isListening = false;
+  String _recognizedText = '';
+  double _soundLevel = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _speech = stt.SpeechToText();
+  }
+
+  void _startListening() async {
+    bool available = await _speech.initialize(
+      onStatus: (status) => print('Speech status: $status'),
+      onError: (error) => print('Speech error: $error'),
+    );
+
+    if (available) {
+      setState(() {
+        _isListening = true;
+        _recognizedText = '';
+      });
+
+      _speech.listen(
+        onResult: (val) {
+          setState(() {
+            _recognizedText = val.recognizedWords;
+          });
+        },
+        listenMode: stt.ListenMode.dictation,
+        partialResults: true,
+        localeId: _getLocaleId(widget.fromLanguage),
+        onSoundLevelChange: (level) => setState(() => _soundLevel = level),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Speech recognition not available")),
+      );
+    }
+  }
+
+  void _stopListening() {
+    _speech.stop();
+    setState(() => _isListening = false);
+  }
+
+  void _goToChooseOutput() {
+    if (_recognizedText.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Please speak something first")),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => ChooseOutputScreen(
+              fromLanguage: widget.fromLanguage,
+              toLanguage: widget.toLanguage,
+              recognizedText: _recognizedText,
+            ),
+      ),
+    );
+  }
+
+  String _getLocaleId(String language) {
+    switch (language.toLowerCase()) {
+      case 'english':
+        return 'en_US';
+      case 'hindi':
+        return 'hi_IN';
+      case 'telugu':
+        return 'te_IN';
+      default:
+        return 'en_US';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFB3E5FC),
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Voice Translation",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 20),
+              if (_isListening)
+                const Text(
+                  "Listening...",
+                  style: TextStyle(fontSize: 22, color: Colors.lightBlueAccent),
+                ),
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  if (_isListening)
+                    _stopListening();
+                  else
+                    _startListening();
+                },
+                child: Icon(
+                  _isListening ? Icons.mic : Icons.mic_none,
+                  size: 50,
+                ),
+              ),
+              const SizedBox(height: 30),
+              if (_recognizedText.isNotEmpty)
+                ElevatedButton(
+                  onPressed: _goToChooseOutput,
+                  child: const Text("Next"),
+                ),
+              const SizedBox(height: 20),
+              Text(_recognizedText, style: const TextStyle(fontSize: 18)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
