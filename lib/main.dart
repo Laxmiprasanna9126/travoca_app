@@ -700,6 +700,7 @@ class MyApp extends StatelessWidget {
   }
 }
 */
+/*
 // lib/main.dart
 import 'package:flutter/material.dart';
 import 'services/mongo_service.dart';
@@ -768,6 +769,166 @@ class MyApp extends StatelessWidget {
             fromLanguage: '',
             toLanguage: '',
             userId: '',
+          );
+        },
+      },
+    );
+  }
+}
+*/
+/*
+import 'package:flutter/material.dart';
+import 'services/mongo_service.dart';
+
+// Screens
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'screens/language_selection_screen.dart';
+import 'screens/choose_output_mode.dart';
+import 'screens/listening_screen.dart';
+import 'screens/choose_output.dart';
+import 'screens/history_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoService.connect();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Travoca App',
+      theme: ThemeData(useMaterial3: true),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/language_selection': (context) => const LanguageSelectionScreen(),
+        '/choose_output_mode': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+
+          return ChooseOutputModeScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+          );
+        },
+        '/listening': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+
+          return ListeningScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+          );
+        },
+        '/choose_output': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+
+          return ChooseOutputScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+            recognizedText: args?['recognizedText'] ?? '',
+          );
+        },
+        // ✅ Fixed History Route
+        '/history': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+
+          // Pass selected languages or leave empty to show all
+          return HistoryScreen(
+            fromLanguage: args?['fromLanguage'] ?? '',
+            toLanguage: args?['toLanguage'] ?? '',
+          );
+        },
+      },
+    );
+  }
+}
+*/
+import 'package:flutter/material.dart';
+import 'services/mongo_service.dart';
+
+// Screens
+import 'screens/splash_screen.dart';
+import 'screens/login_screen.dart';
+import 'screens/signup_screen.dart';
+import 'screens/language_selection_screen.dart';
+import 'screens/choose_output_mode.dart';
+import 'screens/listening_screen.dart';
+import 'screens/choose_output.dart';
+import 'screens/history_screen.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await MongoService.connect();
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Travoca App',
+      theme: ThemeData(useMaterial3: true),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/signup': (context) => const SignUpScreen(),
+        '/language_selection': (context) => const LanguageSelectionScreen(),
+        '/choose_output_mode': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+          return ChooseOutputModeScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+          );
+        },
+        '/listening': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+          return ListeningScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+          );
+        },
+        '/choose_output': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+          return ChooseOutputScreen(
+            fromLanguage: args?['fromLanguage'] ?? 'English',
+            toLanguage: args?['toLanguage'] ?? 'Hindi',
+            recognizedText: args?['recognizedText'] ?? '',
+          );
+        },
+        '/history': (context) {
+          final args =
+              ModalRoute.of(context)?.settings.arguments
+                  as Map<String, String>?;
+
+          return HistoryScreen(
+            fromLanguage: args?['fromLanguage'] ?? '',
+            toLanguage: args?['toLanguage'] ?? '',
           );
         },
       },

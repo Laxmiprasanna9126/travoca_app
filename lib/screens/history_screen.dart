@@ -5222,6 +5222,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 }
 */
+/* not storing history
 // lib/screens/history_screen.dart
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -5316,6 +5317,139 @@ class _HistoryScreenState extends State<HistoryScreen>
             title: Text("${item['fromLanguage']} ➜ ${item['toLanguage']}"),
             subtitle: Text(
               "🗣 ${item['sourceText']}\n💬 ${item['translatedText']}",
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () => _deleteEntry(item['_id'].toString()),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildVoiceHistory() {
+    if (voiceHistory.isEmpty) {
+      return const Center(child: Text('No voice history.'));
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: voiceHistory.length,
+      itemBuilder: (context, index) {
+        final item = voiceHistory[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: ListTile(
+            leading: const Icon(Icons.mic),
+            title: Text("${item['fromLanguage']} ➜ ${item['toLanguage']}"),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("🎧 ${item['sourceAudioPath'] ?? 'No source audio'}"),
+                Text("🔊 ${item['translatedAudioPath'] ?? 'No translation'}"),
+              ],
+            ),
+            trailing: IconButton(
+              icon: const Icon(Icons.delete, color: Colors.red),
+              onPressed: () => _deleteEntry(item['_id'].toString()),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+*/
+
+//trying to fix history visiblility
+import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import '../services/mongo_service.dart';
+
+class HistoryScreen extends StatefulWidget {
+  final String? fromLanguage;
+  final String? toLanguage;
+
+  const HistoryScreen({super.key, this.fromLanguage, this.toLanguage});
+
+  @override
+  State<HistoryScreen> createState() => _HistoryScreenState();
+}
+
+class _HistoryScreenState extends State<HistoryScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  List<Map<String, dynamic>> textHistory = [];
+  List<Map<String, dynamic>> voiceHistory = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _loadHistory();
+  }
+
+  Future<void> _loadHistory() async {
+    final all = await MongoService.fetchHistory(
+      fromLanguage:
+          widget.fromLanguage?.isEmpty ?? true ? null : widget.fromLanguage,
+      toLanguage: widget.toLanguage?.isEmpty ?? true ? null : widget.toLanguage,
+    );
+
+    setState(() {
+      textHistory = all.where((e) => e['type'] == 'text').toList();
+      voiceHistory = all.where((e) => e['type'] == 'voice').toList();
+    });
+  }
+
+  Future<void> _deleteEntry(String id) async {
+    await MongoService.deleteHistoryById(id);
+    await _loadHistory();
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('History', style: TextStyle(color: Colors.black)),
+        backgroundColor: const Color(0xFFB3E5FC),
+        centerTitle: true,
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [Tab(text: 'Text'), Tab(text: 'Voice')],
+        ),
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [_buildTextHistory(), _buildVoiceHistory()],
+      ),
+    );
+  }
+
+  Widget _buildTextHistory() {
+    if (textHistory.isEmpty) {
+      return const Center(child: Text('No text history.'));
+    }
+    return ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: textHistory.length,
+      itemBuilder: (context, index) {
+        final item = textHistory[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: ListTile(
+            title: Text("${item['fromLanguage']} ➜ ${item['toLanguage']}"),
+            subtitle: Text(
+              "🗣 ${item['sourceText']}\n💬 ${item['translatedText'] ?? ''}",
             ),
             trailing: IconButton(
               icon: const Icon(Icons.delete, color: Colors.red),

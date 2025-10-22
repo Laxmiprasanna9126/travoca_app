@@ -2400,7 +2400,7 @@ class MongoService {
   static Future<void> close() async => await db.close();
 }
 */
-
+/* not sytoring history
 // lib/services/mongo_service.dart
 import 'package:mongo_dart/mongo_dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -2523,6 +2523,125 @@ class MongoService {
       return ascending ? dateA.compareTo(dateB) : dateB.compareTo(dateA);
     });
     return list;
+  }
+
+  // Close DB connection
+  static Future<void> close() async => await db.close();
+}
+*/
+import 'package:mongo_dart/mongo_dart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
+
+class MongoService {
+  static late Db db;
+  static const String connectionString =
+      'mongodb+srv://laxmiprasanna2847_db_user:0YIrNsedRbmxALHq@cluster0.2ry58j2.mongodb.net/travoca?retryWrites=true&w=majority&appName=Cluster0';
+
+  // Connect to MongoDB Atlas
+  static Future<void> connect() async {
+    try {
+      db = await Db.create(connectionString);
+      await db.open();
+      print('✅ Connected to MongoDB Atlas!');
+    } catch (e) {
+      print('❌ MongoDB connection error: $e');
+    }
+  }
+
+  // Get collection reference
+  static DbCollection getCollection(String name) => db.collection(name);
+
+  // Get or create unique userId
+  static Future<String> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? userId = prefs.getString('userId');
+    if (userId == null) {
+      userId = const Uuid().v4();
+      await prefs.setString('userId', userId);
+      print("🆔 New userId created: $userId");
+    }
+    return userId;
+  }
+
+  // Add history (text or voice)
+  static Future<void> addHistory({
+    required String fromLanguage,
+    required String toLanguage,
+    required String type,
+    required String sourceText,
+    String? translatedText,
+    String? sourceAudioPath,
+    String? translatedAudioPath,
+    String? userId,
+  }) async {
+    try {
+      final uid = userId ?? await getUserId();
+      final collection = getCollection('history');
+
+      await collection.insert({
+        'userId': uid,
+        'fromLanguage': fromLanguage,
+        'toLanguage': toLanguage,
+        'type': type,
+        'sourceText': sourceText,
+        'translatedText': translatedText,
+        'sourceAudioPath': sourceAudioPath,
+        'translatedAudioPath': translatedAudioPath,
+        'createdAt': DateTime.now(),
+      });
+
+      print("💾 History saved for user: $uid");
+    } catch (e) {
+      print('⚠️ Error inserting history: $e');
+    }
+  }
+
+  // Fetch user-specific history (optional language filter)
+  static Future<List<Map<String, dynamic>>> fetchHistory({
+    String? fromLanguage,
+    String? toLanguage,
+  }) async {
+    try {
+      final uid = await getUserId();
+      final collection = getCollection('history');
+
+      // Build dynamic query
+      final query = <String, dynamic>{'userId': uid};
+      if (fromLanguage != null && fromLanguage.isNotEmpty) {
+        query['fromLanguage'] = fromLanguage;
+      }
+      if (toLanguage != null && toLanguage.isNotEmpty) {
+        query['toLanguage'] = toLanguage;
+      }
+
+      final data = await collection.find(query).toList();
+
+      // Sort newest first
+      data.sort((a, b) {
+        final dateA = a['createdAt'] as DateTime;
+        final dateB = b['createdAt'] as DateTime;
+        return dateB.compareTo(dateA);
+      });
+
+      print("📜 Loaded ${data.length} history items for $uid");
+      return data;
+    } catch (e) {
+      print('⚠️ Error fetching history: $e');
+      return [];
+    }
+  }
+
+  // Delete specific history item
+  static Future<void> deleteHistoryById(String id) async {
+    try {
+      final uid = await getUserId();
+      final collection = getCollection('history');
+      await collection.deleteOne({'_id': ObjectId.parse(id), 'userId': uid});
+      print("🗑️ Deleted chat $id for user: $uid");
+    } catch (e) {
+      print('⚠️ Error deleting history: $e');
+    }
   }
 
   // Close DB connection
